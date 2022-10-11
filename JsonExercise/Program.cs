@@ -113,9 +113,20 @@ static void DepartmentUpdDelAdd(DapperDepartmentRepository? repo)
 
         while (true)
         {
-            Console.WriteLine("Enter the department ID of the name that you want to add here (cannot be an existing departmentID):");
+            Console.WriteLine("Enter the department ID of the name that you want to add here (cannot be an existing departmentID) If you want to add to the incremented list then put \"0\" :");
             bool isItInt = int.TryParse(Console.ReadLine(), out int addDepID);
-            if (isItInt == true)
+            if (isItInt == true && addDepID == 0)
+            {
+                repo.InsertDepartment(addDepName, addDepID);
+                var deppers = repo.GetAllDepartments();
+
+                foreach (var dep in deppers)
+                {
+                    Console.WriteLine($"Department ID: {dep.DepartmentID}; Department Name: {dep.Name}.");
+                }
+                break;
+            }
+            else if (isItInt == true)
             {
 
                 repo.InsertDepartment(addDepName, addDepID);
@@ -125,6 +136,7 @@ static void DepartmentUpdDelAdd(DapperDepartmentRepository? repo)
                 {
                     Console.WriteLine($"Department ID: {dep.DepartmentID}; Department Name: {dep.Name}.");
                 }
+                break;
             }
             else
             {
@@ -150,12 +162,14 @@ static void DepartmentUpdDelAdd(DapperDepartmentRepository? repo)
         string restarter = Console.ReadLine();
         if (restarter.ToLower() == "yes")
         {
-            DepartmentUpdDelAdd(repo);
             Console.Clear();
+            DepartmentUpdDelAdd(repo);
+
         }
         else if (restarter.ToLower() == "no")
         {
             Console.WriteLine("Thanks for coming... Have a great day!");
+            break;
         }
         else
         {
